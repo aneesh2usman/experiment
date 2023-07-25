@@ -1,0 +1,41 @@
+CREATE TABLE products (
+  product_id INT NOT NULL,
+  product_name VARCHAR(255) NOT NULL,
+  product_date DATE NOT NULL,
+  PRIMARY KEY (product_id,product_date)
+)
+PARTITION BY RANGE (product_date);
+
+CREATE TABLE product_details (
+  product_id INT NOT NULL,
+  product_details VARCHAR(255) NOT NULL,
+  product_date DATE NOT NULL,
+  PRIMARY KEY (product_id,product_date),
+  FOREIGN KEY (product_id,product_date) REFERENCES products (product_id,product_date)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
+)
+PARTITION BY RANGE (product_date);
+
+
+CREATE TABLE products (
+  product_id INT NOT NULL,
+  product_name VARCHAR(255) NOT NULL,
+  product_date DATE NOT NULL,
+  PRIMARY KEY (product_id,product_date)
+)
+PARTITION BY RANGE (product_date);
+
+CREATE TABLE product_details (
+  product_id INT NOT NULL,
+  product_details VARCHAR(255) NOT NULL,
+  product_date DATE NOT NULL,
+  PRIMARY KEY (product_id,product_date),
+  FOREIGN KEY (product_id,product_date) REFERENCES products (product_id,product_date)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
+)
+PARTITION BY RANGE (product_date);
+
+CREATE TABLE products_partition_p1 PARTITION OF products
+        FOR VALUES FROM ('2023-01-01') TO ('2024-01-01');
