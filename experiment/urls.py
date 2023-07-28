@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from orders.routing import websocket_urlpatterns
 
 urlpatterns = [
     path("order/", include("orders.urls")),
+    path('order-websocket/', include(websocket_urlpatterns)),
     path("admin/", admin.site.urls),
 ]

@@ -86,28 +86,28 @@ class LineItemView(View):
             }
         else:
             lineitems = LineItem.objects.all().select_related("order")
-            # print(lineitems.lineitemimage)
-            # print("**get_raw_query_results***",get_raw_query_results())
-            for lineitem in lineitems:
-                products = Product.objects.filter(lineitem_id = lineitem.id)
-                print("******lineitems*****",products)
-                for product in products:
-                    print(product)
+            # # print(lineitems.lineitemimage)
+            # # print("**get_raw_query_results***",get_raw_query_results())
+            # for lineitem in lineitems:
+            #     products = Product.objects.filter(lineitem_id = lineitem.id)
+            #     print("******lineitems*****",products)
+            #     for product in products:
+            #         print(product)
             # product = Product.objects.all().select_related("lineitem")
             # print("***lineitems.order_id.id****",lineitems.query)
             # print(lineitems.query)
-            # authors = Author.objects.prefetch_related("book2_set").all()
-            # print(authors.query)
-            # for author in authors:
-            #     print(author.book2_set.all())
-            #     print(author.book2_set.all().query)
+            authors = Author.objects.prefetch_related("book2_set").all()
+            print(authors.query)
+            for author in authors:
+                print(author.book2_set.all())
+                print(author.book2_set.all().query)
             # LineItemImage.objects.create()
-            image = LineItemImage(name="test2",lineitem=lineitems[0],date_range = lineitems[0].date_range)
-            image.save()
-            lineitems2 = LineItem.objects.all().select_related("order","lineitemimage").values(
-                "name","order__name","lineitemimage__name"
-            )
-            print(lineitems2)
+            # image = LineItemImage(name="test2",lineitem=lineitems[0],date_range = lineitems[0].date_range)
+            # image.save()
+            # lineitems2 = LineItem.objects.all().select_related("order","lineitemimage").values(
+            #     "name","order__name","lineitemimage__name"
+            # )
+            # print(lineitems2)
             data = list(lineitems.values())
             # data = [{'id': lineitem.id, 'product_name': lineitem.product_name, 'quantity': lineitem.quantity} for lineitem in lineitems]
 
@@ -133,3 +133,5 @@ class LineItemView(View):
         lineitem = get_object_or_404(LineItem, id=lineitem_id)
         lineitem.delete()
         return JsonResponse({'message': 'Line item deleted successfully'})
+
+
