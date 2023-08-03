@@ -43,6 +43,12 @@ INSTALLED_APPS = [
     'psqlextra',
     
 ]
+ASGI_APPLICATION = 'experiment.asgi.application'
+CHANNEL_LAYERS = {
+    'default':{
+        'BACKEND':'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 MIDDLEWARE = [
     

@@ -8,6 +8,19 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.forms.models import model_to_dict
+
+from django.shortcuts import render
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+# Create your views here.
+
+def lobby(request):
+    return render(request, 'lobby.html')
+
+def update_product_list(request):
+    # Your code to update the product list here
+    return render(request, 'update_product_list.html')
+
 class PersonListView(ListView):
     model = Order
     template_name = 'orders_list.html'
@@ -76,6 +89,14 @@ class LineItemView(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, lineitem_id=None):
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            "product_list",
+            {
+                "type": "update_product_list",
+                "message": "A new product has been addedfdfdfdd."
+            }
+        )
         if lineitem_id:
             lineitem = get_object_or_404(LineItem, id=lineitem_id)
             data = {

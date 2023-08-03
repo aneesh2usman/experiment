@@ -1,3 +1,4 @@
+import json
 from django.core.management.base import BaseCommand
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
@@ -8,7 +9,6 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.forms.models import model_to_dict
-from django.db import Prefetch
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
@@ -27,10 +27,12 @@ class Command(BaseCommand):
         # For example:
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
-            'product_list_group',
+            "product_list",
             {
-                'type': 'send.product_list',
-                'products': self.get_product_list(),
+                "type": "update_product_list",
+                "message": "A new product has been added."
             }
         )
+
+        
        

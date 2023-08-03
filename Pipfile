@@ -9,7 +9,7 @@ psycopg2-binary = "*"
 django-postgres-extra = "*"
 django-composite-foreignkey = "*"
 django-extensions = "*"
-channels = "*"
+channels = "==3.0.4"
 
 [dev-packages]
 
