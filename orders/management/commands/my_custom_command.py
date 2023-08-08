@@ -13,8 +13,8 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 
-from orders.models import Author, Book2
-
+from orders.models import Author, Book2, LineItem, LineItemImage,Order
+from datetime import date
 def get_product_list():
     products = Author.objects.all()
     product_list = [{'id': product.id, 'name': product.name} for product in products]
@@ -25,14 +25,24 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         # Your code here
         # For example:
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            "product_list",
-            {
-                "type": "update_product_list",
-                "message": "A new product has been added."
-            }
-        )
+        # lineitems2 = LineItem.objects.all().select_related("order","lineitemimage").values(
+        #         "name","order__name","lineitemimage__name"
+        #     )
+        
+        # print(lineitems2)
+
+        # asd = LineItemImage.objects.all().select_related("lineitem").values(
+        #         "name","lineitem__name","lineitem__order__name"
+        #     )
+        
+        # print(asd)
+
+        orders = Order.objects.prefetch_related("lineitem_set").all()
+
+        for order in orders:
+            print(order.lineitem_set.all())
+            print(order.lineitem_set.all().query)
+
 
         
        

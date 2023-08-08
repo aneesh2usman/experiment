@@ -12,6 +12,7 @@ from psqlextra.backend.migrations.operations import PostgresAddRangePartition
 from compositefk.fields import CompositeForeignKey,LocalFieldValue,RawFieldValue,FunctionBasedFieldValue
 from django.utils import translation
 import datetime
+from django.conf import settings
 class Order(PostgresPartitionedModel):
     name = models.TextField()
     year = models.CharField(max_length=255)
@@ -39,13 +40,19 @@ class CustomCompositeForeignKey(CompositeForeignKey):
 class LineItem(PostgresPartitionedModel):
     name = models.TextField()
     year = models.CharField(max_length=255)
-    order_id = models.IntegerField()
+     
+    
     created = models.DateTimeField(auto_now_add=True)
     date_range = models.DateField("Date", default=datetime.date.today)
-    order = CustomCompositeForeignKey(Order, on_delete=models.CASCADE, related_name='order', to_fields={
-        "id": "order_id",
-        "date_range": "date_range"
-    })
+    if settings.DISABLE_COMPOSITEFOREIGNKEY:
+        
+        order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    else:
+        order_id = models.IntegerField()
+        order = CustomCompositeForeignKey(Order, on_delete=models.CASCADE, related_name='order', to_fields={
+            "id": "order_id",
+            "date_range": "date_range"
+        })
     class PartitioningMeta:
         method = PostgresPartitioningMethod.RANGE
         key = ["date_range"]
@@ -204,3 +211,5 @@ class Book2(models.Model):
 
     def __str__(self):
         return self.title
+
+

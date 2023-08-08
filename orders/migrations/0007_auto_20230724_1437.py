@@ -21,16 +21,16 @@ class Migration(migrations.Migration):
             name="LineItemImage",
             fields=[
                 ("name", models.TextField()),
-                ("lineitem_id", models.IntegerField()),
-                # (
-                #     "lineitem",
-                #     models.OneToOneField(
-                #         on_delete=django.db.models.deletion.CASCADE,
-                #         primary_key=True,
-                #         serialize=False,
-                #         to="orders.lineitem",
-                #     ),
-                # ),
+                # ("lineitem_id", models.IntegerField()),
+                (
+                    "lineitem",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to="orders.lineitem",
+                    ),
+                ),
                 (
                     "date_range",
                     models.DateField(default=datetime.date.today, verbose_name="Date"),
