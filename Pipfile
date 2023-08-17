@@ -10,8 +10,14 @@ django-postgres-extra = "*"
 django-composite-foreignkey = "*"
 django-extensions = "*"
 channels = "==3.0.4"
+djangorestframework = "*"
+python-magic = "*"
+pycryptodome = "*"
+pillow = "*"
+django-crontab = "*"
 
 [dev-packages]
+faker = "*"
 
 [requires]
 python_version = "3.10"

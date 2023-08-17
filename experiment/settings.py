@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import logging
+from logging.handlers import TimedRotatingFileHandler
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     "orders",
     'psqlextra',
     "htmx_test",
+    'django_crontab',
     
 ]
 ASGI_APPLICATION = 'experiment.asgi.application'
@@ -60,6 +64,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "htmx_test.middleware.api_key_validation_middleware.APIKeyValidationMiddleware",
+    "htmx_test.middleware.json_middleware.JSONMiddleware",
+    
     
 ]
 
@@ -150,3 +157,62 @@ ASGI_APPLICATION = 'experiment.asgi.application'
 
 
 DISABLE_COMPOSITEFOREIGNKEY =False
+
+ENCRYPTED_PASSWORD = "dockervision"
+
+LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
+LOGGING_LEVEL = logging.DEBUG
+# CRON_JOB_LOGS = os.path.join(LOGGING_DIR, 'cronjob_file.log')
+CRON_JOB_LOGS = "/tmp/cronjob_file.log"
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(LOGGING_DIR, 'app.log'),
+            'when': 'midnight',
+            'interval': 1,  # Create a new log file every day
+            'backupCount': 7,  # Keep up to 7 backup files
+            'formatter': 'standard',
+        },
+        'cronjob_file': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': CRON_JOB_LOGS,
+            'when': 'midnight',
+            'interval': 1,  # Create a new log file every day
+            'backupCount': 7,  # Keep up to 7 backup files
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        },
+        'django_cronjob': {
+            'handlers': ['cronjob_file'],
+            'level':LOGGING_LEVEL,
+            'propagate': True,
+        },
+    },
+    'root': {
+        'handlers': ['file'],
+        'level': LOGGING_LEVEL,
+    },
+}
+print("*****CRON_JOB_LOGS****",CRON_JOB_LOGS)
+# CRONJOBS = [
+#     ('*/1 * * * *', 'htmx_test.cron.my_scheduled_job' ,f'>> {CRON_JOB_LOGS}')
+# ]
+CRONJOBS = [
+    ('*/1 * * * *', 'htmx_test.cron.my_scheduled_job')
+]

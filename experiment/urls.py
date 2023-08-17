@@ -18,7 +18,13 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+api_urlpatterns =[
+    path("", include("htmx_test.api.urls")),
+]
+
 urlpatterns = [
+
+    path("api/v1/", include(api_urlpatterns)),
     path("order/", include("orders.urls")),
     path("htmx_test/", include("htmx_test.urls")),
     path("admin/", admin.site.urls),
