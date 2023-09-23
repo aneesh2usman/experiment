@@ -15,6 +15,8 @@ python-magic = "*"
 pycryptodome = "*"
 pillow = "*"
 django-crontab = "*"
+django-brotli = "*"
+django-cachalot = "*"
 
 [dev-packages]
 faker = "*"

@@ -17,7 +17,7 @@ class APIKey(models.Model):
     api_key = models.CharField(max_length=500)
     api_secret=models.CharField(max_length=500)
     def __str__(self):
-        return self.name
+        return self.api_key
     def save(self, *args, **kwargs):
         if self.api_key:
             self.api_key = encrypt(self.api_key)

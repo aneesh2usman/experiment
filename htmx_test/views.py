@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Contact
 from django.views.generic.list import ListView
@@ -22,3 +23,13 @@ def delete_contact(request, pk):
     contact_id.delete()
     contacts = Contact.objects.all()
     return render(request, 'contact-list.html', {'contacts': contacts})
+
+from django.views.decorators.cache import cache_page
+
+@cache_page(60)  # Cache the result for 60 seconds
+def my_view(request):
+    # Your database query here
+    data = Contact.objects.all()
+    print("******data*dd***")
+
+    return JsonResponse({"dfddf":"dffddff"})

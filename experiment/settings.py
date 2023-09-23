@@ -46,8 +46,19 @@ INSTALLED_APPS = [
     'psqlextra',
     "htmx_test",
     'django_crontab',
+    # 'cachalot',
     
 ]
+# CACHALOT_ENABLED = True
+# CACHALOT_CACHE = 'default'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-id',
+        "OPTIONS": {"MAX_ENTRIES": 20},
+    }
+}
 ASGI_APPLICATION = 'experiment.asgi.application'
 CHANNEL_LAYERS = {
     'default':{
@@ -56,7 +67,7 @@ CHANNEL_LAYERS = {
 }
 
 MIDDLEWARE = [
-    
+    # 'django_brotli.middleware.BrotliMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -164,51 +175,51 @@ LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
 LOGGING_LEVEL = logging.DEBUG
 # CRON_JOB_LOGS = os.path.join(LOGGING_DIR, 'cronjob_file.log')
 CRON_JOB_LOGS = "/tmp/cronjob_file.log"
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'standard': {
-            'format': '[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': LOGGING_LEVEL,
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(LOGGING_DIR, 'app.log'),
-            'when': 'midnight',
-            'interval': 1,  # Create a new log file every day
-            'backupCount': 7,  # Keep up to 7 backup files
-            'formatter': 'standard',
-        },
-        'cronjob_file': {
-            'level': LOGGING_LEVEL,
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': CRON_JOB_LOGS,
-            'when': 'midnight',
-            'interval': 1,  # Create a new log file every day
-            'backupCount': 7,  # Keep up to 7 backup files
-            'formatter': 'standard',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': LOGGING_LEVEL,
-            'propagate': True,
-        },
-        'django_cronjob': {
-            'handlers': ['cronjob_file'],
-            'level':LOGGING_LEVEL,
-            'propagate': True,
-        },
-    },
-    'root': {
-        'handlers': ['file'],
-        'level': LOGGING_LEVEL,
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'standard': {
+#             'format': '[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s',
+#         },
+#     },
+#     'handlers': {
+#         'file': {
+#             'level': LOGGING_LEVEL,
+#             'class': 'logging.handlers.TimedRotatingFileHandler',
+#             'filename': os.path.join(LOGGING_DIR, 'app.log'),
+#             'when': 'midnight',
+#             'interval': 1,  # Create a new log file every day
+#             'backupCount': 7,  # Keep up to 7 backup files
+#             'formatter': 'standard',
+#         },
+#         'cronjob_file': {
+#             'level': LOGGING_LEVEL,
+#             'class': 'logging.handlers.TimedRotatingFileHandler',
+#             'filename': CRON_JOB_LOGS,
+#             'when': 'midnight',
+#             'interval': 1,  # Create a new log file every day
+#             'backupCount': 7,  # Keep up to 7 backup files
+#             'formatter': 'standard',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': LOGGING_LEVEL,
+#             'propagate': True,
+#         },
+#         'django_cronjob': {
+#             'handlers': ['cronjob_file'],
+#             'level':LOGGING_LEVEL,
+#             'propagate': True,
+#         },
+#     },
+#     'root': {
+#         'handlers': ['file'],
+#         'level': LOGGING_LEVEL,
+#     },
+# }
 print("*****CRON_JOB_LOGS****",CRON_JOB_LOGS)
 # CRONJOBS = [
 #     ('*/1 * * * *', 'htmx_test.cron.my_scheduled_job' ,f'>> {CRON_JOB_LOGS}')

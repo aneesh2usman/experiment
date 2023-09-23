@@ -32,9 +32,20 @@ class ApiImageView(View):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request):
-        image = SampleImage()
-        # image.image = request.data["image"]
-        image.create_from_base64(request.data["image"])
-        # print(image.image)
-        image.save()
-        return JsonResponse({}, safe=False)
+        # image = SampleImage()
+        # # image.image = request.data["image"]
+        # image.create_from_base64(request.data["image"])
+        # # print(image.image)
+        # image.save()
+        asd = {
+            "image1":request.data["image"],
+            "image2":request.data["image"],
+            "image3":request.data["image"],
+            "image4":request.data["image"],
+            "image5":request.data["image"],
+            "image6":request.data["image"],
+            }
+        asd = {
+            "image1":"asd sdddv asd sddsd asd dd ffggf ggh gh gh ghghh gh hghg  hg ghh"
+            }
+        return JsonResponse(asd, safe=False)
